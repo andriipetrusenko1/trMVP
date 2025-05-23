@@ -65,9 +65,10 @@ export default async function handler(
       apiKeyPrefix: process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 10) + '...' : 'none'
     });
 
-    // Initialize OpenAI client
+    // Initialize OpenAI client - Updated initialization
     const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: process.env.OPENAI_API_KEY || '',  // Provide empty string as fallback
+      dangerouslyAllowBrowser: true  // Add this for client-side usage if needed
     });
     
     console.log('OpenAI client initialized');
@@ -89,7 +90,7 @@ export default async function handler(
     
     Remember that your goal is to help merchants reduce chargebacks, increase dispute win rates, and protect their revenue.`;
 
-    // Call the OpenAI API
+    // Call the OpenAI API - Updated API call
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
