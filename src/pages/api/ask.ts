@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import OpenAI from 'openai';
+import { OpenAI } from 'openai';
 
 type ResponseData = {
   response: string;
@@ -65,7 +65,7 @@ export default async function handler(
       apiKeyPrefix: process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 10) + '...' : 'none'
     });
 
-    // Initialize OpenAI client
+    // Initialize OpenAI client with named import
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
