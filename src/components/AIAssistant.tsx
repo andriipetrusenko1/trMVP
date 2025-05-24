@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Send, X, Bot, User, Clock } from 'lucide-react';
+import { Send, X, Bot, User, Clock, Sparkles, Shield, AlertCircle, HelpCircle } from 'lucide-react';
 
 interface AIAssistantProps {
   onClose: () => void;
@@ -11,13 +11,32 @@ interface Message {
   timestamp: Date;
 }
 
-// Sample suggestions for the AI Assistant
+// Enhanced suggestions with categories and icons
 const suggestions = [
-  "How can I reduce my chargeback rate?",
-  "What evidence should I collect for item not received disputes?",
-  "How to respond to fraudulent transaction claims?",
-  "What are the most common reasons for chargebacks?",
-  "How to identify potential friendly fraud?"
+  {
+    category: "Prevention",
+    questions: [
+      "How can I reduce my chargeback rate?",
+      "What are the best fraud prevention strategies?",
+      "How to implement effective chargeback prevention?"
+    ]
+  },
+  {
+    category: "Evidence",
+    questions: [
+      "What evidence should I collect for disputes?",
+      "How to document proof of delivery?",
+      "What records should I keep for chargebacks?"
+    ]
+  },
+  {
+    category: "Resolution",
+    questions: [
+      "How to respond to fraudulent claims?",
+      "What are the common chargeback reasons?",
+      "How to handle friendly fraud cases?"
+    ]
+  }
 ];
 
 // Mock responses for client-side fallback when API is not available
@@ -35,7 +54,17 @@ export default function AIAssistant({ onClose }: AIAssistantProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'system',
-      content: 'Hello! I\'m your AI Chargeback Assistant. How can I help you today with chargeback management?',
+      content: `Welcome to your Chargeback Management Assistant! 🛡️
+
+I'm here to help you navigate the complex world of chargeback management and fraud prevention. I can assist with:
+
+• Chargeback prevention strategies
+• Evidence collection and documentation
+• Fraud detection and prevention
+• Dispute resolution processes
+• Best practices for e-commerce
+
+How can I help you today?`,
       timestamp: new Date()
     }
   ]);
@@ -187,14 +216,14 @@ If you're seeing this message repeatedly, please check:
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden flex flex-col" style={{ maxHeight: '90vh' }}>
         {/* Header */}
-        <div className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+        <div className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-              <Bot className="w-6 h-6" />
+              <Shield className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold">Chargeback Assistant</h3>
-              <p className="text-sm text-blue-100">Powered by OpenAI</p>
+              <h3 className="text-lg font-semibold">Chargeback Management Assistant</h3>
+              <p className="text-sm text-blue-100">Your AI-powered fraud prevention expert</p>
             </div>
           </div>
           <button 
@@ -229,7 +258,7 @@ If you're seeing this message repeatedly, please check:
                   {message.role === 'user' ? (
                     <User className="w-4 h-4 mr-2" />
                   ) : (
-                    <Bot className="w-4 h-4 mr-2" />
+                    <Shield className="w-4 h-4 mr-2" />
                   )}
                   <span className="text-xs font-medium">
                     {message.role === 'user' ? 'You' : 'Assistant'}
@@ -246,7 +275,8 @@ If you're seeing this message repeatedly, please check:
           <div ref={messagesEndRef} />
           
           {error && (
-            <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg">
+            <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg flex items-center">
+              <AlertCircle className="w-5 h-5 mr-2" />
               {error}
             </div>
           )}
@@ -255,38 +285,56 @@ If you're seeing this message repeatedly, please check:
         {/* Suggestions */}
         <div className="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
           <div className="mb-4">
-            <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Quick Suggestions</h4>
-            <div className="flex flex-wrap gap-2">
-              {suggestions.map((suggestion, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleSuggestionClick(suggestion)}
-                  className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                >
-                  {suggestion}
-                </button>
+            <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 flex items-center">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Quick Suggestions
+            </h4>
+            <div className="space-y-3">
+              {suggestions.map((category, index) => (
+                <div key={index}>
+                  <h5 className="text-xs font-semibold text-gray-400 dark:text-gray-500 mb-2">
+                    {category.category}
+                  </h5>
+                  <div className="flex flex-wrap gap-2">
+                    {category.questions.map((question, qIndex) => (
+                      <button
+                        key={qIndex}
+                        onClick={() => handleSuggestionClick(question)}
+                        className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                      >
+                        {question}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
 
           {/* Input Form */}
           <form onSubmit={handleSubmit} className="flex gap-2">
-            <input
-              type="text"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Ask about chargeback management..."
-              className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="Ask about chargeback management..."
+                className="w-full px-4 py-2 pl-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <HelpCircle className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+            </div>
             <button
               type="submit"
               disabled={isLoading || !prompt.trim()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
-                <Send className="w-5 h-5" />
+                <>
+                  <Send className="w-5 h-5 mr-2" />
+                  Send
+                </>
               )}
             </button>
           </form>
