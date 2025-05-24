@@ -130,11 +130,88 @@ export default function Home() {
               </div>
             </div>
             <div className="relative">
-              <img
-                src="/images/trading-platform.jpg"
-                alt="Trading Platform"
-                className="rounded-2xl shadow-2xl"
-              />
+              <div className="w-full h-48 bg-gradient-to-br from-[#0C0F0E] to-[#1A1D1C] rounded-xl mb-6 p-6 flex items-center justify-center">
+                <svg
+                  className="w-full h-full"
+                  viewBox="0 0 400 200"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  {/* Trading Chart Line */}
+                  <path
+                    d="M50 150 C 100 50, 150 180, 200 100 C 250 20, 300 150, 350 80"
+                    stroke="#00C805"
+                    strokeWidth="3"
+                    fill="none"
+                  />
+                  
+                  {/* AI Brain with Circuit Pattern */}
+                  <g transform="translate(200, 100)">
+                    <circle cx="0" cy="0" r="40" fill="#00C805" fillOpacity="0.1" />
+                    <path
+                      d="M-20 -20 L20 -20 M-20 0 L20 0 M-20 20 L20 20 M0 -20 L0 20"
+                      stroke="#00C805"
+                      strokeWidth="2"
+                    />
+                    <circle cx="0" cy="0" r="8" fill="#00C805" />
+                    
+                    {/* Circuit Lines */}
+                    <path
+                      d="M-30 -30 L-20 -20 M30 -30 L20 -20 M-30 30 L-20 20 M30 30 L20 20"
+                      stroke="#00C805"
+                      strokeWidth="1.5"
+                      strokeOpacity="0.6"
+                    />
+                  </g>
+                  
+                  {/* Data Points */}
+                  <g>
+                    <circle cx="100" cy="120" r="4" fill="#00C805" />
+                    <circle cx="150" cy="80" r="4" fill="#00C805" />
+                    <circle cx="200" cy="130" r="4" fill="#00C805" />
+                    <circle cx="250" cy="70" r="4" fill="#00C805" />
+                    <circle cx="300" cy="110" r="4" fill="#00C805" />
+                  </g>
+                  
+                  {/* Connection Lines */}
+                  <g stroke="#00C805" strokeWidth="1.5" strokeOpacity="0.4">
+                    <line x1="100" y1="120" x2="150" y2="80" />
+                    <line x1="150" y1="80" x2="200" y2="130" />
+                    <line x1="200" y1="130" x2="250" y2="70" />
+                    <line x1="250" y1="70" x2="300" y2="110" />
+                  </g>
+                  
+                  {/* Prediction Arrow */}
+                  <g transform="translate(320, 90)">
+                    <path
+                      d="M0 0 L25 0 L20 -5 M25 0 L20 5"
+                      stroke="#00C805"
+                      strokeWidth="2.5"
+                      fill="none"
+                    />
+                  </g>
+                  
+                  {/* Glowing Effect */}
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge>
+                      <feMergeNode in="coloredBlur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                  
+                  {/* Apply glow to main elements */}
+                  <g filter="url(#glow)">
+                    <path
+                      d="M50 150 C 100 50, 150 180, 200 100 C 250 20, 300 150, 350 80"
+                      stroke="#00C805"
+                      strokeWidth="3"
+                      fill="none"
+                    />
+                    <circle cx="200" cy="100" r="8" fill="#00C805" />
+                  </g>
+                </svg>
+              </div>
               <div className="absolute -bottom-6 -right-6 h-32 w-32 bg-[#00C805] rounded-full opacity-20 blur-2xl"></div>
             </div>
           </div>
@@ -149,17 +226,9 @@ export default function Home() {
             <p className="mt-4 text-xl text-gray-400">Let our AI help you make better trading decisions</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-[#0C0F0E] rounded-2xl p-8 border border-gray-800">
-              <img
-                src="/images/ai-prediction.jpg"
-                alt="AI Prediction"
-                className="w-full h-48 object-cover rounded-xl mb-6"
-              />
-              <h3 className="text-xl font-semibold text-white mb-4">Market Predictions</h3>
-              <p className="text-gray-400">Our AI analyzes market patterns to predict potential price movements.</p>
-            </div>
-            <div className="bg-[#0C0F0E] rounded-2xl p-8 border border-gray-800">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* AI-Powered Analysis Card */}
+            <div className="bg-[#0C0F0E] rounded-2xl p-8 border border-gray-800 hover:border-[#00C805]/30 transition-all duration-300 hover:transform hover:scale-105">
               <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#00C805] to-[#00B305] text-white flex items-center justify-center mb-6">
                 <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -168,7 +237,9 @@ export default function Home() {
               <h3 className="text-xl font-semibold text-white mb-4">AI-Powered Analysis</h3>
               <p className="text-gray-400">Our AI analyzes market patterns to identify trading opportunities and provide actionable insights.</p>
             </div>
-            <div className="bg-[#0C0F0E] rounded-2xl p-8 border border-gray-800">
+
+            {/* Secure Platform Card */}
+            <div className="bg-[#0C0F0E] rounded-2xl p-8 border border-gray-800 hover:border-[#00C805]/30 transition-all duration-300 hover:transform hover:scale-105">
               <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#00C805] to-[#00B305] text-white flex items-center justify-center mb-6">
                 <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -176,6 +247,17 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-semibold text-white mb-4">Secure Platform</h3>
               <p className="text-gray-400">Trade with confidence using our secure platform with advanced encryption and protection.</p>
+            </div>
+
+            {/* Market Predictions Card */}
+            <div className="bg-[#0C0F0E] rounded-2xl p-8 border border-gray-800 hover:border-[#00C805]/30 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#00C805] to-[#00B305] text-white flex items-center justify-center mb-6">
+                <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Market Predictions</h3>
+              <p className="text-gray-400">Our AI analyzes market patterns to predict potential price movements.</p>
             </div>
           </div>
         </div>
