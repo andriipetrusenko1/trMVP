@@ -17,8 +17,10 @@ import {
   Newspaper,
   ChevronDown,
   Search,
-  Menu
+  Menu,
+  ArrowLeft
 } from 'lucide-react';
+import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 // Mock trading data
 const mockTradingData = {
@@ -38,6 +40,17 @@ const mockTradingData = {
     { id: 'TR-003', symbol: 'AAPL', type: 'Buy', amount: '10 shares', price: '$174.50', time: '09:30 AM' },
   ]
 };
+
+// Sample data for the chart
+const chartData = [
+  { time: '00:00', price: 43000 },
+  { time: '04:00', price: 43500 },
+  { time: '08:00', price: 43200 },
+  { time: '12:00', price: 43800 },
+  { time: '16:00', price: 44100 },
+  { time: '20:00', price: 43900 },
+  { time: '24:00', price: 44200 },
+];
 
 export default function Dashboard() {
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
@@ -75,9 +88,10 @@ export default function Dashboard() {
         {/* Top Navbar */}
         <nav className="h-16 bg-[#1A1D1C] border-b border-gray-800 flex items-center justify-between px-6">
           <div className="flex items-center space-x-4">
-            <button className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors">
-              <Menu className="w-6 h-6" />
-            </button>
+            <Link href="/" className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors">
+              <ArrowLeft className="w-5 h-5" />
+              <span>Back to Home</span>
+            </Link>
             <div className="relative">
               <input
                 type="text"
@@ -117,8 +131,36 @@ export default function Dashboard() {
                   <button className="px-3 py-1 rounded-lg text-gray-400 hover:text-white text-sm">1M</button>
                 </div>
               </div>
-              <div className="h-[300px] bg-gray-800/50 rounded-xl flex items-center justify-center">
-                <span className="text-gray-400">Chart Component</span>
+              <div className="h-[300px] bg-gray-800/50 rounded-xl p-4">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RechartsLineChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis 
+                      dataKey="time" 
+                      stroke="#9CA3AF"
+                      tick={{ fill: '#9CA3AF' }}
+                    />
+                    <YAxis 
+                      stroke="#9CA3AF"
+                      tick={{ fill: '#9CA3AF' }}
+                    />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: '#1A1D1C',
+                        border: '1px solid #374151',
+                        borderRadius: '0.5rem',
+                        color: '#fff'
+                      }}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="price" 
+                      stroke="#00C805" 
+                      strokeWidth={2}
+                      dot={{ fill: '#00C805', strokeWidth: 2 }}
+                    />
+                  </RechartsLineChart>
+                </ResponsiveContainer>
               </div>
             </div>
 
