@@ -248,7 +248,6 @@ export default function Dashboard() {
           <span className="mr-2">💬</span> AI Assistant
         </button>
 
-
         {/* AI Assistant Modal */}
         {isAssistantOpen && (
           <AIAssistant onClose={() => setIsAssistantOpen(false)} />
