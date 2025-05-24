@@ -21,7 +21,6 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { LineChart as ReLineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 // Mock trading data
 const mockTradingData = {
@@ -145,7 +144,7 @@ export default function Dashboard() {
               </div>
               <div className="h-[300px] bg-gray-800/50 rounded-xl flex items-center justify-center">
                 <ResponsiveContainer width="100%" height="90%">
-                  <ReLineChart data={marketData}>
+                  <RechartsLineChart data={marketData}>
                     <XAxis dataKey="time" stroke="#888" />
                     <YAxis stroke="#888" domain={['auto', 'auto']} />
                     <Tooltip
@@ -159,7 +158,7 @@ export default function Dashboard() {
                       strokeWidth={2}
                       dot={false}
                     />
-                  </ReLineChart>
+                  </RechartsLineChart>
                 </ResponsiveContainer>
               </div>
             </div>
