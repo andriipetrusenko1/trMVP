@@ -33,43 +33,27 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section with Introduction */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Hero Section with Background Image */}
+      <section className="relative pt-32 pb-24 px-4">
+        <div className="absolute inset-0 bg-[url('/images/trading-bg.jpg')] bg-cover bg-center opacity-20"></div>
+        <div className="relative max-w-7xl mx-auto">
           <div className="text-center">
-            {/* Introduction Text */}
-            <div className="max-w-3xl mx-auto mb-12">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-8">
-                Hi, I'm Andriia
-              </h1>
-              <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
-                A full-stack developer with 6+ years of experience building advanced, AI-powered platforms. 
-                I'm new to Upwork but bring deep expertise in crafting smart, reliable web applications.
-              </p>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link 
-                href="/dashboard" 
-                className="px-8 py-4 rounded-full text-lg font-medium text-white bg-[#00C805] hover:bg-[#00B305] transition-all transform hover:scale-105"
-              >
-                View My Work
+            <h1 className="text-6xl md:text-7xl font-extrabold mb-8">
+              <span className="block text-white">Build our website with</span>
+              <span className="block text-[#00C805]">AI based trading platform</span>
+            </h1>
+            <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-400">
+              Experience the future of trading with our AI-powered platform. Make smarter decisions, execute faster trades, and maximize your returns.
+            </p>
+            <div className="mt-12 flex justify-center space-x-4">
+              <Link href="/dashboard" className="px-8 py-4 rounded-full text-lg font-medium text-white bg-[#00C805] hover:bg-[#00B305] transition-all transform hover:scale-105">
+                Start Trading Now
               </Link>
-              <Link 
-                href="#contact" 
-                className="px-8 py-4 rounded-full text-lg font-medium text-white border border-[#00C805] hover:bg-[#00C805]/10 transition-all transform hover:scale-105"
-              >
-                Contact Me
-              </Link>
+              <a href="#features" className="px-8 py-4 rounded-full text-lg font-medium text-white border border-gray-700 hover:border-gray-600 transition-colors">
+                Learn More
+              </a>
             </div>
           </div>
-        </div>
-
-        {/* Background Decoration */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0C0F0E] to-transparent"></div>
-          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
         </div>
       </section>
 
