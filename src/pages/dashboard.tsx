@@ -21,6 +21,7 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart as ReLineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 // Mock trading data
 const mockTradingData = {
@@ -50,6 +51,17 @@ const chartData = [
   { time: '16:00', price: 44100 },
   { time: '20:00', price: 43900 },
   { time: '24:00', price: 44200 },
+];
+
+// Mock data with visible variation
+const marketData = [
+  { time: '09:00', price: 100 },
+  { time: '10:00', price: 102 },
+  { time: '11:00', price: 98 },
+  { time: '12:00', price: 105 },
+  { time: '13:00', price: 103 },
+  { time: '14:00', price: 108 },
+  { time: '15:00', price: 104 },
 ];
 
 export default function Dashboard() {
@@ -131,35 +143,23 @@ export default function Dashboard() {
                   <button className="px-3 py-1 rounded-lg text-gray-400 hover:text-white text-sm">1M</button>
                 </div>
               </div>
-              <div className="h-[300px] bg-gray-800/50 rounded-xl p-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <RechartsLineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                    <XAxis 
-                      dataKey="time" 
-                      stroke="#9CA3AF"
-                      tick={{ fill: '#9CA3AF' }}
+              <div className="h-[300px] bg-gray-800/50 rounded-xl flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="90%">
+                  <ReLineChart data={marketData}>
+                    <XAxis dataKey="time" stroke="#888" />
+                    <YAxis stroke="#888" domain={['auto', 'auto']} />
+                    <Tooltip
+                      contentStyle={{ background: '#222', border: 'none', borderRadius: 8 }}
+                      labelStyle={{ color: '#00C805' }}
                     />
-                    <YAxis 
-                      stroke="#9CA3AF"
-                      tick={{ fill: '#9CA3AF' }}
-                    />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: '#1A1D1C',
-                        border: '1px solid #374151',
-                        borderRadius: '0.5rem',
-                        color: '#fff'
-                      }}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="price" 
-                      stroke="#00C805" 
+                    <Line
+                      type="monotone"
+                      dataKey="price"
+                      stroke="#00C805"
                       strokeWidth={2}
-                      dot={{ fill: '#00C805', strokeWidth: 2 }}
+                      dot={false}
                     />
-                  </RechartsLineChart>
+                  </ReLineChart>
                 </ResponsiveContainer>
               </div>
             </div>
