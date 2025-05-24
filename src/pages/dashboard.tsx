@@ -1,8 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import AIAssistant from '@/components/AIAssistant';
-import TradingChart from '@/components/TradingChart';
+import { 
+  LayoutDashboard, 
+  LineChart, 
+  Wallet, 
+  Settings, 
+  Bell, 
+  Globe, 
+  Plus, 
+  TrendingUp, 
+  TrendingDown,
+  Star,
+  MessageSquare,
+  Newspaper,
+  ChevronDown,
+  Search,
+  Menu
+} from 'lucide-react';
 
 // Mock trading data
 const mockTradingData = {
@@ -25,234 +41,245 @@ const mockTradingData = {
 
 export default function Dashboard() {
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview');
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <div className="min-h-screen bg-[#0C0F0E] text-white">
       <Head>
-        <title>Trading Dashboard | AI Trading Platform</title>
+        <title>Dashboard | AI Trading Platform</title>
         <meta name="description" content="AI-powered trading dashboard" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* Navigation */}
-      <nav className="bg-[#0C0F0E]/80 backdrop-blur-lg border-b border-gray-800 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link href="/" className="text-2xl font-bold text-[#00C805]">
-                AI Trading Platform
-              </Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link href="/" className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors">
-                Home
-              </Link>
-              <Link href="/dashboard" className="px-4 py-2 rounded-full text-sm font-medium text-white bg-[#00C805] hover:bg-[#00B305] transition-all transform hover:scale-105">
-                Dashboard
-              </Link>
-            </div>
-          </div>
+      {/* Left Sidebar */}
+      <aside className="fixed left-0 top-0 h-full w-20 bg-[#1A1D1C] border-r border-gray-800 flex flex-col items-center py-6">
+        <div className="mb-8">
+          <span className="text-2xl font-bold text-[#00C805]">AT</span>
         </div>
-      </nav>
+        <nav className="flex-1 flex flex-col items-center space-y-8">
+          <button className="p-3 rounded-xl bg-[#00C805]/10 text-[#00C805] hover:bg-[#00C805]/20 transition-colors">
+            <LayoutDashboard className="w-6 h-6" />
+          </button>
+          <button className="p-3 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors">
+            <LineChart className="w-6 h-6" />
+          </button>
+          <button className="p-3 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors">
+            <Wallet className="w-6 h-6" />
+          </button>
+          <button className="p-3 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors">
+            <Settings className="w-6 h-6" />
+          </button>
+        </nav>
+      </aside>
 
-      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        {/* Portfolio Overview */}
-        <div className="mb-8 animate-fade-in">
-          <h1 className="text-4xl font-bold text-white mb-2">Portfolio Overview</h1>
-          <p className="text-gray-400">Welcome back! Here's your trading summary</p>
-        </div>
-
-        {/* Portfolio Stats */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-          <div className="bg-[#1A1D1C] rounded-2xl p-6 border border-gray-800 hover:border-[#00C805] transition-all transform hover:scale-105 animate-slide-up">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-400">Portfolio Value</p>
-                <p className="text-2xl font-bold text-white mt-1">{mockTradingData.portfolioValue}</p>
-              </div>
-              <div className="h-12 w-12 rounded-full bg-[#00C805]/20 flex items-center justify-center">
-                <svg className="h-6 w-6 text-[#00C805]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-            <div className="mt-4 flex items-center">
-              <span className="text-[#00C805] text-sm font-medium">{mockTradingData.dailyChange}</span>
-              <span className="text-gray-400 text-sm ml-2">Today</span>
+      {/* Main Content */}
+      <main className="ml-20">
+        {/* Top Navbar */}
+        <nav className="h-16 bg-[#1A1D1C] border-b border-gray-800 flex items-center justify-between px-6">
+          <div className="flex items-center space-x-4">
+            <button className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors">
+              <Menu className="w-6 h-6" />
+            </button>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search markets..."
+                className="pl-10 pr-4 py-2 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00C805] w-64"
+              />
+              <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
             </div>
           </div>
-
-          <div className="bg-[#1A1D1C] rounded-2xl p-6 border border-gray-800 hover:border-[#00C805] transition-all transform hover:scale-105 animate-slide-up">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-400">Total Profit</p>
-                <p className="text-2xl font-bold text-white mt-1">{mockTradingData.totalProfit}</p>
+          <div className="flex items-center space-x-4">
+            <button className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors">
+              <Globe className="w-6 h-6" />
+            </button>
+            <button className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors">
+              <Bell className="w-6 h-6" />
+            </button>
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-[#00C805]/20 flex items-center justify-center">
+                <span className="text-sm font-medium text-[#00C805]">JD</span>
               </div>
-              <div className="h-12 w-12 rounded-full bg-[#00C805]/20 flex items-center justify-center">
-                <svg className="h-6 w-6 text-[#00C805]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                </svg>
-              </div>
-            </div>
-            <div className="mt-4 flex items-center">
-              <span className="text-[#00C805] text-sm font-medium">+15.2%</span>
-              <span className="text-gray-400 text-sm ml-2">All Time</span>
+              <span className="text-sm font-medium text-gray-300">John Doe</span>
+              <ChevronDown className="w-4 h-4 text-gray-400" />
             </div>
           </div>
+        </nav>
 
-          <div className="bg-[#1A1D1C] rounded-2xl p-6 border border-gray-800 hover:border-[#00C805] transition-all transform hover:scale-105 animate-slide-up">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-400">Open Positions</p>
-                <p className="text-2xl font-bold text-white mt-1">{mockTradingData.openPositions}</p>
+        {/* Dashboard Content */}
+        <div className="p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Market Overview */}
+            <div className="lg:col-span-2 bg-[#1A1D1C] rounded-2xl p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold">Market Overview</h2>
+                <div className="flex space-x-2">
+                  <button className="px-3 py-1 rounded-lg bg-[#00C805]/10 text-[#00C805] text-sm">1D</button>
+                  <button className="px-3 py-1 rounded-lg text-gray-400 hover:text-white text-sm">1W</button>
+                  <button className="px-3 py-1 rounded-lg text-gray-400 hover:text-white text-sm">1M</button>
+                </div>
               </div>
-              <div className="h-12 w-12 rounded-full bg-[#00C805]/20 flex items-center justify-center">
-                <svg className="h-6 w-6 text-[#00C805]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
+              <div className="h-[300px] bg-gray-800/50 rounded-xl flex items-center justify-center">
+                <span className="text-gray-400">Chart Component</span>
               </div>
             </div>
-            <div className="mt-4 flex items-center">
-              <span className="text-[#00C805] text-sm font-medium">Active</span>
-            </div>
-          </div>
 
-          <div className="bg-[#1A1D1C] rounded-2xl p-6 border border-gray-800 hover:border-[#00C805] transition-all transform hover:scale-105 animate-slide-up">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-400">AI Predictions</p>
-                <p className="text-2xl font-bold text-white mt-1">85%</p>
-              </div>
-              <div className="h-12 w-12 rounded-full bg-[#00C805]/20 flex items-center justify-center">
-                <svg className="h-6 w-6 text-[#00C805]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-              </div>
-            </div>
-            <div className="mt-4 flex items-center">
-              <span className="text-[#00C805] text-sm font-medium">Accuracy</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Content Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Trading Chart */}
-          <div className="lg:col-span-2">
+            {/* Portfolio Snapshot */}
             <div className="bg-[#1A1D1C] rounded-2xl p-6 border border-gray-800">
-              <TradingChart />
-            </div>
-          </div>
-
-          {/* Watchlist */}
-          <div className="lg:col-span-1">
-            <div className="bg-[#1A1D1C] rounded-2xl p-6 border border-gray-800">
-              <h2 className="text-xl font-semibold text-white mb-6">Watchlist</h2>
+              <h2 className="text-xl font-semibold mb-6">Portfolio</h2>
               <div className="space-y-4">
-                {mockTradingData.watchlist.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-[#0C0F0E] rounded-xl hover:bg-[#0C0F0E]/80 transition-colors">
-                    <div>
-                      <p className="text-white font-medium">{item.symbol}</p>
-                      <p className="text-gray-400 text-sm">{item.price}</p>
-                    </div>
-                    <span className={`text-sm font-medium ${item.change.startsWith('+') ? 'text-[#00C805]' : 'text-red-500'}`}>
-                      {item.change}
-                    </span>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">Total Balance</span>
+                  <span className="text-xl font-semibold">$24,500.00</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">24h Change</span>
+                  <span className="text-[#00C805] flex items-center">
+                    <TrendingUp className="w-4 h-4 mr-1" />
+                    +2.5%
+                  </span>
+                </div>
+                <div className="pt-4 border-t border-gray-800">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-gray-400">BTC</span>
+                    <span className="text-[#00C805]">+1.2%</span>
                   </div>
-                ))}
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-gray-400">ETH</span>
+                    <span className="text-[#00C805]">+3.5%</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-400">SOL</span>
+                    <span className="text-red-500">-0.8%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* AI Insights */}
+            <div className="lg:col-span-2 bg-[#1A1D1C] rounded-2xl p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold">AI Insights</h2>
+                <button className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors">
+                  <MessageSquare className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-800/50 rounded-xl">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[#00C805] font-medium">BTC/USD</span>
+                    <span className="text-gray-400 text-sm">2 hours ago</span>
+                  </div>
+                  <p className="text-gray-300">Potential breakout pattern detected. Consider monitoring resistance levels.</p>
+                </div>
+                <div className="p-4 bg-gray-800/50 rounded-xl">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[#00C805] font-medium">ETH/USD</span>
+                    <span className="text-gray-400 text-sm">4 hours ago</span>
+                  </div>
+                  <p className="text-gray-300">Volume spike detected. Increased volatility expected in next 24 hours.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Watchlist */}
+            <div className="bg-[#1A1D1C] rounded-2xl p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold">Watchlist</h2>
+                <button className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors">
+                  <Plus className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded-xl">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-[#00C805]">BTC</span>
+                    <span className="text-gray-400">Bitcoin</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-white">$43,250.00</div>
+                    <div className="text-[#00C805] text-sm">+2.5%</div>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded-xl">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-[#00C805]">ETH</span>
+                    <span className="text-gray-400">Ethereum</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-white">$2,850.00</div>
+                    <div className="text-[#00C805] text-sm">+1.8%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Trade Panel */}
+            <div className="lg:col-span-2 bg-[#1A1D1C] rounded-2xl p-6 border border-gray-800">
+              <h2 className="text-xl font-semibold mb-6">Trade</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2">Amount</label>
+                    <input
+                      type="number"
+                      className="w-full px-4 py-2 rounded-lg bg-gray-800/50 text-white focus:outline-none focus:ring-2 focus:ring-[#00C805]"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <button className="w-full px-4 py-2 rounded-lg bg-[#00C805] text-white font-medium hover:bg-[#00B305] transition-colors">
+                    Buy
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2">Price</label>
+                    <input
+                      type="number"
+                      className="w-full px-4 py-2 rounded-lg bg-gray-800/50 text-white focus:outline-none focus:ring-2 focus:ring-[#00C805]"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <button className="w-full px-4 py-2 rounded-lg bg-red-500 text-white font-medium hover:bg-red-600 transition-colors">
+                    Sell
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* News Feed */}
+            <div className="bg-[#1A1D1C] rounded-2xl p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold">News</h2>
+                <button className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors">
+                  <Newspaper className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-800/50 rounded-xl">
+                  <h3 className="text-white font-medium mb-2">Bitcoin Surges Past $43,000</h3>
+                  <p className="text-gray-400 text-sm">Market analysts predict continued growth...</p>
+                </div>
+                <div className="p-4 bg-gray-800/50 rounded-xl">
+                  <h3 className="text-white font-medium mb-2">Ethereum 2.0 Update</h3>
+                  <p className="text-gray-400 text-sm">Major network upgrade scheduled for next month...</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Recent Trades */}
-        <div className="mt-8">
-          <div className="bg-[#1A1D1C] rounded-2xl p-6 border border-gray-800">
-            <h2 className="text-xl font-semibold text-white mb-6">Recent Trades</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-800">
-                <thead>
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">ID</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Symbol</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Type</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Amount</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Time</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-800">
-                  {mockTradingData.recentTrades.map((trade) => (
-                    <tr key={trade.id} className="hover:bg-[#0C0F0E] transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white">{trade.id}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white">{trade.symbol}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          trade.type === 'Buy' ? 'bg-[#00C805]/20 text-[#00C805]' : 'bg-red-500/20 text-red-500'
-                        }`}>
-                          {trade.type}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white">{trade.amount}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white">{trade.price}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{trade.time}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <button className="bg-[#1A1D1C] hover:bg-[#00C805]/10 border border-gray-800 rounded-xl p-4 flex items-center space-x-3 transition-all transform hover:scale-105">
-            <div className="bg-[#00C805] rounded-lg p-2">
-              <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-            </div>
-            <span className="text-white font-medium">New Trade</span>
-          </button>
-          <button className="bg-[#1A1D1C] hover:bg-[#00C805]/10 border border-gray-800 rounded-xl p-4 flex items-center space-x-3 transition-all transform hover:scale-105">
-            <div className="bg-[#00C805] rounded-lg p-2">
-              <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-            <span className="text-white font-medium">Generate Report</span>
-          </button>
-          <button className="bg-[#1A1D1C] hover:bg-[#00C805]/10 border border-gray-800 rounded-xl p-4 flex items-center space-x-3 transition-all transform hover:scale-105">
-            <div className="bg-[#00C805] rounded-lg p-2">
-              <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-            </div>
-            <span className="text-white font-medium">View Analytics</span>
-          </button>
-        </div>
-
-        {/* AI Assistant Button */}
-        <button
-          onClick={() => setIsAssistantOpen(true)}
-          className="fixed bottom-6 right-6 bg-[#00C805] hover:bg-[#00B305] text-white font-medium py-3 px-6 rounded-full shadow-lg flex items-center transition-all transform hover:scale-105"
-        >
-          <span className="mr-2">💬</span> AI Assistant
-        </button>
-
-        {/* AI Assistant Modal */}
-        {isAssistantOpen && (
-          <AIAssistant onClose={() => setIsAssistantOpen(false)} />
-        )}
       </main>
+
+      {/* AI Assistant Button */}
+      <button
+        onClick={() => setIsAssistantOpen(true)}
+        className="fixed bottom-6 right-6 bg-[#00C805] hover:bg-[#00B305] text-white font-medium py-3 px-6 rounded-full shadow-lg flex items-center transition-all transform hover:scale-105"
+      >
+        <span className="mr-2">💬</span> AI Assistant
+      </button>
+
+      {/* AI Assistant Modal */}
+      {isAssistantOpen && (
+        <AIAssistant onClose={() => setIsAssistantOpen(false)} />
+      )}
     </div>
   );
 }
