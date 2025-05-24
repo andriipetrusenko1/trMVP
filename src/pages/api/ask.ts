@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import OpenAI from 'openai';
+import { OpenAI } from 'openai';
 
 type ResponseData = {
   response: string;
@@ -31,66 +31,39 @@ export default async function handler(
     return res.status(400).json({ response: '', error: 'Invalid prompt' });
   }
 
-  // For development without an API key, use mock responses
-  if (process.env.NODE_ENV === 'development' && !process.env.OPENAI_API_KEY) {
-    console.log('Using mock response for development');
-    
-    // Simple keyword matching for mock responses
-    const lowerPrompt = prompt.toLowerCase();
-    let mockResponse = mockResponses.default;
-    
-    if (lowerPrompt.includes('reduce') && lowerPrompt.includes('rate')) {
-      mockResponse = mockResponses.rate;
-    } else if (lowerPrompt.includes('evidence') && lowerPrompt.includes('not received')) {
-      mockResponse = mockResponses.evidence;
-    } else if (lowerPrompt.includes('fraud')) {
-      mockResponse = mockResponses.fraud;
-    } else if (lowerPrompt.includes('common') && lowerPrompt.includes('reason')) {
-      mockResponse = mockResponses.common;
-    } else if (lowerPrompt.includes('friendly fraud')) {
-      mockResponse = mockResponses.friendly;
-    }
-    
-    // Add a slight delay to simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    return res.status(200).json({ response: mockResponse });
+  // Check if API key exists
+  if (!process.env.OPENAI_API_KEY) {
+    console.error('OpenAI API key is missing');
+    return res.status(500).json({ 
+      response: '', 
+      error: 'OpenAI API key is not configured. Please check your environment variables.' 
+    });
   }
 
   try {
-    // Log environment for debugging (redact the full key in production)
-    console.log('Environment:', {
-      nodeEnv: process.env.NODE_ENV,
-      hasApiKey: !!process.env.OPENAI_API_KEY,
-      apiKeyPrefix: process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 10) + '...' : 'none'
-    });
-
-    // Initialize OpenAI client - Updated initialization
+    // Initialize OpenAI client
     const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY || '',  // Provide empty string as fallback
-      dangerouslyAllowBrowser: true  // Add this for client-side usage if needed
+      apiKey: process.env.OPENAI_API_KEY,
     });
-    
-    console.log('OpenAI client initialized');
 
-    // Create a system message to provide context about the application
-    const systemMessage = `You are an AI assistant for a chargeback management system specializing in e-commerce.
+    // Create a system message for trading context
+    const systemMessage = `You are an AI trading assistant specializing in market analysis and trading strategies.
     
     Your expertise includes:
-    - Chargeback prevention strategies
-    - Dispute resolution processes
-    - Evidence collection best practices
-    - Fraud detection and prevention
-    - Card network rules and regulations
-    - Customer communication strategies
+    - Market trend analysis
+    - Technical and fundamental analysis
+    - Risk management strategies
+    - Trading pattern recognition
+    - Portfolio optimization
+    - Market sentiment analysis
     
-    Provide concise, actionable advice tailored to e-commerce businesses.
+    Provide concise, actionable advice tailored to traders.
     When appropriate, structure your responses with numbered lists or bullet points.
-    Include specific examples and practical steps that merchants can implement.
+    Include specific examples and practical steps that traders can implement.
     
-    Remember that your goal is to help merchants reduce chargebacks, increase dispute win rates, and protect their revenue.`;
+    Remember that your goal is to help traders make informed decisions and manage their investments effectively.`;
 
-    // Call the OpenAI API - Updated API call
+    // Call the OpenAI API
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
@@ -113,34 +86,11 @@ export default async function handler(
     if (error instanceof Error) {
       console.error('Error message:', error.message);
       console.error('Error stack:', error.stack);
-      
-      // If it's an OpenAI error, it might have more details
-      if ('status' in error) {
-        console.error('Status:', (error as any).status);
-      }
-      if ('headers' in error) {
-        console.error('Headers:', (error as any).headers);
-      }
     }
     
-    // Fallback to mock responses if OpenAI API fails
-    const lowerPrompt = prompt.toLowerCase();
-    let mockResponse = mockResponses.default;
-    
-    if (lowerPrompt.includes('reduce') && lowerPrompt.includes('rate')) {
-      mockResponse = mockResponses.rate;
-    } else if (lowerPrompt.includes('evidence') && lowerPrompt.includes('not received')) {
-      mockResponse = mockResponses.evidence;
-    } else if (lowerPrompt.includes('fraud')) {
-      mockResponse = mockResponses.fraud;
-    } else if (lowerPrompt.includes('common') && lowerPrompt.includes('reason')) {
-      mockResponse = mockResponses.common;
-    } else if (lowerPrompt.includes('friendly fraud')) {
-      mockResponse = mockResponses.friendly;
-    }
-    
-    return res.status(200).json({ 
-      response: `Note: Using fallback response due to API error.\n\n${mockResponse}` 
+    return res.status(500).json({ 
+      response: '', 
+      error: 'Failed to get response from OpenAI. Please try again later.' 
     });
   }
 }
