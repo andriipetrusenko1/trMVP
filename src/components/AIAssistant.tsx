@@ -10,23 +10,23 @@ interface Message {
   timestamp: Date;
 }
 
-// Sample suggestions for the AI Assistant
+// Updated suggestions for the Trading AI Assistant
 const suggestions = [
-  "How can I reduce my chargeback rate?",
-  "What evidence should I collect for item not received disputes?",
-  "How to respond to fraudulent transaction claims?",
-  "What are the most common reasons for chargebacks?",
-  "How to identify potential friendly fraud?"
+  "What are the current market trends?",
+  "How can I analyze trading patterns?",
+  "What are the best risk management strategies?",
+  "How to identify profitable trading opportunities?",
+  "What indicators should I watch for market analysis?"
 ];
 
-// Mock responses for client-side fallback when API is not available
+// Updated mock responses for trading context
 const mockResponses: Record<string, string> = {
-  default: "I'm your AI Chargeback Assistant. I can help you with managing chargebacks, understanding dispute processes, and implementing prevention strategies.",
-  rate: "To reduce your chargeback rate: 1) Implement clear billing descriptors, 2) Use fraud detection tools, 3) Maintain detailed transaction records, 4) Provide excellent customer service, and 5) Consider 3D Secure authentication for high-risk transactions.",
-  evidence: "For 'item not received' disputes, collect: 1) Delivery confirmation with signature, 2) Tracking information showing delivery to the customer's address, 3) Communication records with the customer about the delivery, 4) GPS delivery confirmation if available, and 5) Photos of the packaged item before shipping.",
-  fraud: "When responding to fraudulent transaction claims: 1) Provide IP address logs showing the customer's location, 2) Show device fingerprinting data, 3) Include AVS and CVV verification results, 4) Document any previous legitimate purchases from the same customer, and 5) Provide evidence that the purchased goods or services were used.",
-  common: "The most common reasons for chargebacks include: 1) Fraudulent transactions (true fraud), 2) Items not received, 3) Items not as described, 4) Duplicate or incorrect charges, 5) Subscription cancellation issues, and 6) Friendly fraud where legitimate purchases are disputed.",
-  friendly: "To identify potential friendly fraud: 1) Look for customers with a history of chargebacks, 2) Check if the customer attempted to contact you before filing a dispute, 3) Verify if the product was used or service accessed, 4) Compare shipping address with billing address, and 5) Review the timing of the dispute relative to the purchase date."
+  default: "I'm your AI Trading Assistant. I can help you with market analysis, trading strategies, risk management, and identifying profitable opportunities.",
+  trends: "Current market trends show: 1) Increased volatility in tech stocks, 2) Strong performance in renewable energy sector, 3) Growing interest in cryptocurrency markets, 4) Shift towards sustainable investments, and 5) Emerging opportunities in AI-driven companies.",
+  patterns: "Key trading patterns to watch: 1) Support and resistance levels, 2) Moving average crossovers, 3) Volume patterns, 4) Price action formations, and 5) Market sentiment indicators.",
+  risk: "Effective risk management strategies include: 1) Setting stop-loss orders, 2) Diversifying your portfolio, 3) Position sizing based on risk tolerance, 4) Regular portfolio rebalancing, and 5) Using hedging techniques when appropriate.",
+  opportunities: "To identify profitable opportunities: 1) Monitor market news and events, 2) Analyze technical indicators, 3) Study sector performance, 4) Track institutional movements, and 5) Consider market sentiment.",
+  analysis: "Essential market analysis tools: 1) Technical analysis charts, 2) Fundamental analysis metrics, 3) Market sentiment indicators, 4) Volume analysis, and 5) Economic calendar events."
 };
 
 export default function AIAssistant({ onClose }: AIAssistantProps) {
@@ -34,7 +34,7 @@ export default function AIAssistant({ onClose }: AIAssistantProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'system',
-      content: 'Hello! I\'m your AI Chargeback Assistant. How can I help you today with chargeback management?',
+      content: 'Hello! I\'m your AI Trading Assistant. How can I help you today with trading strategies, market analysis, or risk management?',
       timestamp: new Date()
     }
   ]);
@@ -51,16 +51,16 @@ export default function AIAssistant({ onClose }: AIAssistantProps) {
   const getMockResponse = (promptText: string): string => {
     const lowerPrompt = promptText.toLowerCase();
     
-    if (lowerPrompt.includes('reduce') && lowerPrompt.includes('rate')) {
-      return mockResponses.rate;
-    } else if (lowerPrompt.includes('evidence') && lowerPrompt.includes('not received')) {
-      return mockResponses.evidence;
-    } else if (lowerPrompt.includes('fraud') && lowerPrompt.includes('transaction')) {
-      return mockResponses.fraud;
-    } else if (lowerPrompt.includes('common') && lowerPrompt.includes('reason')) {
-      return mockResponses.common;
-    } else if (lowerPrompt.includes('friendly fraud')) {
-      return mockResponses.friendly;
+    if (lowerPrompt.includes('trends')) {
+      return mockResponses.trends;
+    } else if (lowerPrompt.includes('patterns')) {
+      return mockResponses.patterns;
+    } else if (lowerPrompt.includes('risk')) {
+      return mockResponses.risk;
+    } else if (lowerPrompt.includes('opportunities')) {
+      return mockResponses.opportunities;
+    } else if (lowerPrompt.includes('analysis')) {
+      return mockResponses.analysis;
     }
     
     return mockResponses.default;
@@ -190,47 +190,50 @@ If you're seeing this message repeatedly, please check:
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden flex flex-col" style={{ maxHeight: '80vh' }}>
-        <div className="flex justify-between items-center p-4 bg-blue-600 text-white">
+    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden flex flex-col" style={{ maxHeight: '85vh' }}>
+        {/* Header */}
+        <div className="flex justify-between items-center p-4 bg-gradient-to-r from-[#00C805] to-[#00B305]">
           <div className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-white text-blue-600 flex items-center justify-center mr-3">
-              <span className="text-xl">💬</span>
+            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center mr-3 shadow-md">
+              <span className="text-xl text-[#00C805]">📈</span>
             </div>
-            <h3 className="text-lg font-semibold">AI Chargeback Assistant</h3>
+            <div>
+              <h3 className="text-lg font-semibold text-white">AI Trading Assistant</h3>
+              <p className="text-xs text-white/80">Online • Ready to help</p>
+            </div>
           </div>
           <button 
             onClick={onClose}
-            className="text-white hover:text-gray-200"
+            className="text-white hover:text-white/80 transition-colors"
           >
-            ✕
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
         
-        <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
+        {/* Messages Container */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
           {messages.map((message, index) => (
             <div 
               key={index} 
-              className={`mb-4 ${
-                message.role === 'user' 
-                  ? 'flex justify-end' 
-                  : 'flex justify-start'
-              }`}
+              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div 
-                className={`max-w-3/4 rounded-lg p-3 ${
+                className={`max-w-[80%] rounded-2xl p-4 shadow-sm ${
                   message.role === 'user' 
-                    ? 'bg-blue-600 text-white' 
+                    ? 'bg-[#00C805] text-white' 
                     : message.role === 'system'
                     ? 'bg-gray-200 text-gray-800'
-                    : 'bg-white text-gray-800 border border-gray-200 shadow-sm'
+                    : 'bg-white text-gray-800 border border-gray-200'
                 }`}
               >
-                <p className="whitespace-pre-wrap">{message.content}</p>
+                <p className="whitespace-pre-wrap text-sm">{message.content}</p>
                 <div 
-                  className={`text-xs mt-1 ${
+                  className={`text-xs mt-2 ${
                     message.role === 'user' 
-                      ? 'text-blue-100' 
+                      ? 'text-white/80' 
                       : 'text-gray-500'
                   }`}
                 >
@@ -242,18 +245,18 @@ If you're seeing this message repeatedly, please check:
           <div ref={messagesEndRef} />
           
           {error && (
-            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+            <div className="bg-red-50 text-red-600 p-4 rounded-2xl text-sm border border-red-200">
               {error}
             </div>
           )}
           
           {isLoading && (
-            <div className="flex justify-start mb-4">
-              <div className="bg-white text-gray-800 rounded-lg p-3 border border-gray-200 shadow-sm">
+            <div className="flex justify-start">
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-200">
                 <div className="flex space-x-2">
-                  <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                  <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-[#00C805] animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-[#00C805] animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-[#00C805] animate-bounce" style={{ animationDelay: '300ms' }}></div>
                 </div>
               </div>
             </div>
@@ -262,14 +265,14 @@ If you're seeing this message repeatedly, please check:
         
         {/* Suggestions */}
         {messages.length < 3 && (
-          <div className="px-4 py-2 bg-gray-50 border-t border-gray-200">
+          <div className="px-4 py-3 bg-white border-t border-gray-200">
             <p className="text-xs text-gray-500 mb-2">Suggested questions:</p>
             <div className="flex flex-wrap gap-2">
               {suggestions.map((suggestion, index) => (
                 <button
                   key={index}
                   onClick={() => handleSuggestionClick(suggestion)}
-                  className="text-xs bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1 text-gray-700"
+                  className="text-xs bg-gray-100 hover:bg-gray-200 rounded-full px-4 py-2 text-gray-700 transition-colors"
                 >
                   {suggestion}
                 </button>
@@ -278,12 +281,13 @@ If you're seeing this message repeatedly, please check:
           </div>
         )}
         
-        <form onSubmit={handleSubmit} className="p-4 border-t bg-white">
+        {/* Input Form */}
+        <form onSubmit={handleSubmit} className="p-4 bg-white border-t border-gray-200">
           <div className="relative">
             <textarea
-              className="w-full p-3 pr-12 border rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-4 pr-12 bg-gray-50 text-gray-800 rounded-xl resize-none focus:ring-2 focus:ring-[#00C805] focus:border-transparent placeholder-gray-400 border border-gray-200"
               rows={2}
-              placeholder="Ask about chargeback management..."
+              placeholder="Ask about trading strategies, market analysis, or risk management..."
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               disabled={isLoading}
@@ -291,10 +295,10 @@ If you're seeing this message repeatedly, please check:
             <button
               type="submit"
               disabled={isLoading || !prompt.trim()}
-              className={`absolute right-2 bottom-2 p-2 rounded-full ${
+              className={`absolute right-3 bottom-3 p-2 rounded-full transition-colors ${
                 isLoading || !prompt.trim()
                   ? 'text-gray-400 cursor-not-allowed'
-                  : 'text-blue-600 hover:bg-blue-100'
+                  : 'text-[#00C805] hover:bg-[#00C805]/10'
               }`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
