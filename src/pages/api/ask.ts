@@ -20,7 +20,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ response: '', error: 'Method not allowed' });
   }
@@ -31,115 +30,47 @@ export default async function handler(
     return res.status(400).json({ response: '', error: 'Invalid prompt' });
   }
 
-  // For development without an API key, use mock responses
-  if (process.env.NODE_ENV === 'development' && !process.env.OPENAI_API_KEY) {
-    console.log('Using mock response for development');
-    
-    // Simple keyword matching for mock responses
-    const lowerPrompt = prompt.toLowerCase();
-    let mockResponse = mockResponses.default;
-    
-    if (lowerPrompt.includes('reduce') && lowerPrompt.includes('rate')) {
-      mockResponse = mockResponses.rate;
-    } else if (lowerPrompt.includes('evidence') && lowerPrompt.includes('not received')) {
-      mockResponse = mockResponses.evidence;
-    } else if (lowerPrompt.includes('fraud')) {
-      mockResponse = mockResponses.fraud;
-    } else if (lowerPrompt.includes('common') && lowerPrompt.includes('reason')) {
-      mockResponse = mockResponses.common;
-    } else if (lowerPrompt.includes('friendly fraud')) {
-      mockResponse = mockResponses.friendly;
-    }
-    
-    // Add a slight delay to simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    return res.status(200).json({ response: mockResponse });
-  }
-
   try {
-    // Log environment for debugging (redact the full key in production)
-    console.log('Environment:', {
-      nodeEnv: process.env.NODE_ENV,
-      hasApiKey: !!process.env.OPENAI_API_KEY,
-      apiKeyPrefix: process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 10) + '...' : 'none'
-    });
-
-    // Initialize OpenAI client with named import
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
-    
-    console.log('OpenAI client initialized');
 
-    // Create a system message to provide context about the application
-    const systemMessage = `You are an AI assistant for a chargeback management system specializing in e-commerce.
-    
-    Your expertise includes:
-    - Chargeback prevention strategies
-    - Dispute resolution processes
-    - Evidence collection best practices
-    - Fraud detection and prevention
-    - Card network rules and regulations
-    - Customer communication strategies
-    
-    Provide concise, actionable advice tailored to e-commerce businesses.
-    When appropriate, structure your responses with numbered lists or bullet points.
-    Include specific examples and practical steps that merchants can implement.
-    
-    Remember that your goal is to help merchants reduce chargebacks, increase dispute win rates, and protect their revenue.`;
-
-    // Call the OpenAI API
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
-        { role: 'system', content: systemMessage },
+        {
+          role: 'system',
+          content: `You are an AI assistant for a chargeback management system specializing in e-commerce.
+          
+          Your expertise includes:
+          - Chargeback prevention strategies
+          - Dispute resolution processes
+          - Evidence collection best practices
+          - Fraud detection and prevention
+          - Card network rules and regulations
+          - Customer communication strategies
+          
+          Provide concise, actionable advice tailored to e-commerce businesses.
+          When appropriate, structure your responses with numbered lists or bullet points.
+          Include specific examples and practical steps that merchants can implement.
+          
+          Remember that your goal is to help merchants reduce chargebacks, increase dispute win rates, and protect their revenue.`
+        },
         { role: 'user', content: prompt }
       ],
       max_tokens: 800,
       temperature: 0.7,
     });
 
-    // Extract the response
     const response = completion.choices[0]?.message?.content || 'Sorry, I couldn\'t generate a response.';
 
-    // Return the response
     return res.status(200).json({ response });
   } catch (error) {
     console.error('OpenAI API error:', error);
     
-    // More detailed error logging
-    if (error instanceof Error) {
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
-      
-      // If it's an OpenAI error, it might have more details
-      if ('status' in error) {
-        console.error('Status:', (error as any).status);
-      }
-      if ('headers' in error) {
-        console.error('Headers:', (error as any).headers);
-      }
-    }
-    
-    // Fallback to mock responses if OpenAI API fails
-    const lowerPrompt = prompt.toLowerCase();
-    let mockResponse = mockResponses.default;
-    
-    if (lowerPrompt.includes('reduce') && lowerPrompt.includes('rate')) {
-      mockResponse = mockResponses.rate;
-    } else if (lowerPrompt.includes('evidence') && lowerPrompt.includes('not received')) {
-      mockResponse = mockResponses.evidence;
-    } else if (lowerPrompt.includes('fraud')) {
-      mockResponse = mockResponses.fraud;
-    } else if (lowerPrompt.includes('common') && lowerPrompt.includes('reason')) {
-      mockResponse = mockResponses.common;
-    } else if (lowerPrompt.includes('friendly fraud')) {
-      mockResponse = mockResponses.friendly;
-    }
-    
-    return res.status(200).json({ 
-      response: `Note: Using fallback response due to API error.\n\n${mockResponse}` 
+    return res.status(500).json({ 
+      response: '', 
+      error: 'Failed to get response from OpenAI API' 
     });
   }
 }

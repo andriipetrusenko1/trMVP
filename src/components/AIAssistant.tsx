@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Send, X, Bot, User, Clock } from 'lucide-react';
 
 interface AIAssistantProps {
   onClose: () => void;
@@ -89,29 +90,22 @@ export default function AIAssistant({ onClose }: AIAssistantProps) {
     try {
       // First try to use the API if available
       try {
-        // Create an AbortController for timeout
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
-        const res = await fetch('/api/ask', {
+        const response = await fetch('/api/ask', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ prompt: promptText }),
-          signal: controller.signal
         });
         
-        clearTimeout(timeoutId);
-        
-        if (!res.ok) {
-          throw new Error(`Server error: ${res.status}`);
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.status}`);
         }
         
-        const data = await res.json();
+        const data = await response.json();
         
         if (!data || !data.response) {
-          throw new Error('Invalid response format from API');
+          throw new Error('Invalid response from API');
         }
         
         // Add assistant response to chat
@@ -190,24 +184,29 @@ If you're seeing this message repeatedly, please check:
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden flex flex-col" style={{ maxHeight: '80vh' }}>
-        <div className="flex justify-between items-center p-4 bg-blue-600 text-white">
-          <div className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-white text-blue-600 flex items-center justify-center mr-3">
-              <span className="text-xl">💬</span>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden flex flex-col" style={{ maxHeight: '90vh' }}>
+        {/* Header */}
+        <div className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+              <Bot className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-semibold">AI Chargeback Assistant</h3>
+            <div>
+              <h3 className="text-lg font-semibold">Chargeback Assistant</h3>
+              <p className="text-sm text-blue-100">Powered by OpenAI</p>
+            </div>
           </div>
           <button 
             onClick={onClose}
-            className="text-white hover:text-gray-200"
+            className="p-2 hover:bg-white/10 rounded-full transition-colors"
           >
-            ✕
+            <X className="w-5 h-5" />
           </button>
         </div>
-        
-        <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
+
+        {/* Messages */}
+        <div className="flex-1 p-4 overflow-y-auto bg-gray-50 dark:bg-gray-900">
           {messages.map((message, index) => (
             <div 
               key={index} 
@@ -218,91 +217,80 @@ If you're seeing this message repeatedly, please check:
               }`}
             >
               <div 
-                className={`max-w-3/4 rounded-lg p-3 ${
+                className={`max-w-3/4 rounded-2xl p-4 ${
                   message.role === 'user' 
                     ? 'bg-blue-600 text-white' 
                     : message.role === 'system'
-                    ? 'bg-gray-200 text-gray-800'
-                    : 'bg-white text-gray-800 border border-gray-200 shadow-sm'
+                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                    : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 shadow-sm'
                 }`}
               >
-                <p className="whitespace-pre-wrap">{message.content}</p>
-                <div 
-                  className={`text-xs mt-1 ${
-                    message.role === 'user' 
-                      ? 'text-blue-100' 
-                      : 'text-gray-500'
-                  }`}
-                >
-                  {formatTime(message.timestamp)}
+                <div className="flex items-center mb-2">
+                  {message.role === 'user' ? (
+                    <User className="w-4 h-4 mr-2" />
+                  ) : (
+                    <Bot className="w-4 h-4 mr-2" />
+                  )}
+                  <span className="text-xs font-medium">
+                    {message.role === 'user' ? 'You' : 'Assistant'}
+                  </span>
+                  <Clock className="w-3 h-3 ml-2 text-gray-400" />
+                  <span className="text-xs text-gray-400 ml-1">
+                    {formatTime(message.timestamp)}
+                  </span>
                 </div>
+                <p className="whitespace-pre-wrap">{message.content}</p>
               </div>
             </div>
           ))}
           <div ref={messagesEndRef} />
           
           {error && (
-            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+            <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg">
               {error}
             </div>
           )}
-          
-          {isLoading && (
-            <div className="flex justify-start mb-4">
-              <div className="bg-white text-gray-800 rounded-lg p-3 border border-gray-200 shadow-sm">
-                <div className="flex space-x-2">
-                  <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                  <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
-        
+
         {/* Suggestions */}
-        {messages.length < 3 && (
-          <div className="px-4 py-2 bg-gray-50 border-t border-gray-200">
-            <p className="text-xs text-gray-500 mb-2">Suggested questions:</p>
+        <div className="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+          <div className="mb-4">
+            <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Quick Suggestions</h4>
             <div className="flex flex-wrap gap-2">
               {suggestions.map((suggestion, index) => (
                 <button
                   key={index}
                   onClick={() => handleSuggestionClick(suggestion)}
-                  className="text-xs bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1 text-gray-700"
+                  className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
                   {suggestion}
                 </button>
               ))}
             </div>
           </div>
-        )}
-        
-        <form onSubmit={handleSubmit} className="p-4 border-t bg-white">
-          <div className="relative">
-            <textarea
-              className="w-full p-3 pr-12 border rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              rows={2}
-              placeholder="Ask about chargeback management..."
+
+          {/* Input Form */}
+          <form onSubmit={handleSubmit} className="flex gap-2">
+            <input
+              type="text"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              disabled={isLoading}
+              placeholder="Ask about chargeback management..."
+              className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
               type="submit"
               disabled={isLoading || !prompt.trim()}
-              className={`absolute right-2 bottom-2 p-2 rounded-full ${
-                isLoading || !prompt.trim()
-                  ? 'text-gray-400 cursor-not-allowed'
-                  : 'text-blue-600 hover:bg-blue-100'
-              }`}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-              </svg>
+              {isLoading ? (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <Send className="w-5 h-5" />
+              )}
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
